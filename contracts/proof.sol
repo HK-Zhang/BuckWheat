@@ -1,4 +1,4 @@
-pragma solidity ^0.4.0;
+pragma solidity ^0.5.8;
 contract Proof {
     struct FileDetails{
         uint timestamp;
@@ -9,18 +9,18 @@ contract Proof {
 
     event logFileAddedStatus(bool status, uint timestamp, string owner, string fileHash);
 
-    function set(string owner, string fileHash) {
+    function set(string memory owner, string memory fileHash) public {
         if(files[fileHash].timestamp == 0){
             files[fileHash] = FileDetails(block.timestamp,owner);
 
-            logFileAddedStatus(true,block.timestamp,owner,fileHash);
+            emit logFileAddedStatus(true,block.timestamp,owner,fileHash);
         }
         else{
-            logFileAddedStatus(false,block.timestamp,owner,fileHash);
+            emit logFileAddedStatus(false,block.timestamp,owner,fileHash);
         }
     }
 
-    function get(string fileHash) returns (uint timestamp, string owner) {
+    function get(string memory fileHash) public view returns (uint timestamp, string memory owner)  {
         return (files[fileHash].timestamp,files[fileHash].owner);
     }
 
