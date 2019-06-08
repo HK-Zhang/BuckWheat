@@ -17,7 +17,7 @@ var Web3 = require("web3");
 web3 = new Web3("https://rinkeby.infura.io/v3/apikey");
 
 const account = "0x3703D1ac42a1d5f96CB5a6872e91E881B2a091F0";
-const privateKey = Buffer.from('privateKey', 'hex');
+const privateKey = Buffer.from('private key', 'hex');
 var contract = new web3.eth.Contract([
 	{
 		"constant": true,
@@ -87,7 +87,7 @@ var contract = new web3.eth.Contract([
 		"name": "logFileAddedStatus",
 		"type": "event"
 	}
-], "0xf09d583e3ee04588a3e60b9a2a4ef4df39d84303");
+], "0x7fde5333cccded60aba6e80dc5f00bdc325b2a0f");
 // var proof = proofContract.at("0xf09d583e3ee04588a3e60b9a2a4ef4df39d84303");
 
 // app.get("/submit", function (req, res) {
@@ -122,7 +122,7 @@ app.get("/submit", function (req, res) {
 			nonce: web3.utils.toHex(txCount),
 			gasLimit: web3.utils.toHex(800000), // Raise the gas limit to a much higher amount
 			gasPrice: web3.utils.toHex(web3.utils.toWei('10', 'gwei')),
-			to: "0xf09d583e3ee04588a3e60b9a2a4ef4df39d84303",
+			to: "0x7fde5333cccded60aba6e80dc5f00bdc325b2a0f",
 			data: contract.methods.set(owner, fileHash).encodeABI()
 		}
 
