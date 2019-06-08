@@ -14,7 +14,7 @@ app.get("/", function (req, res) {
 
 var Web3 = require("web3");
 
-web3 = new Web3("https://rinkeby.infura.io/v3/apikey");
+web3 = new Web3("https://rinkeby.infura.io/v3/api key");
 
 const account = "0x3703D1ac42a1d5f96CB5a6872e91E881B2a091F0";
 const privateKey = Buffer.from('private key', 'hex');
@@ -95,7 +95,7 @@ var contract = new web3.eth.Contract([
 // 	var owner = req.query.owner;
 
 // 	proof.methods.set.sendTransaction(owner, fileHash, {
-// 		from: web3.eth.accounts.privateKeyToAccount('0x19fb558f05e259b413a436fae5d7b2d7a470575072148af209ad286ac4e8c6e5'),
+// 		from: web3.eth.accounts.privateKeyToAccount('replace with privateKey'),
 // 	}, function (error, transactionHash) {
 // 		if (!error) {
 // 			res.send(transactionHash);
@@ -111,7 +111,7 @@ app.get("/submit", function (req, res) {
 	var fileHash = req.query.hash;
 	var owner = req.query.owner;
 
-	// var account = web3.eth.accounts.privateKeyToAccount('0x19fb558f05e259b413a436fae5d7b2d7a470575072148af209ad286ac4e8c6e5');
+	// var account = web3.eth.accounts.privateKeyToAccount('replace with privateKey');
 
 	web3.eth.getTransactionCount(account, (err, txCount) => {
 
@@ -149,7 +149,6 @@ app.get("/submit", function (req, res) {
 		}
 	})
 
-	res.send("done");
 })
 
 
@@ -164,7 +163,8 @@ app.get("/getInfo", function (req, res) {
 
 	contract.methods.get(fileHash).call({ from: account }, (err, result) => {
 		if (!err) {
-			console.log(result);
+			// console.log(result);
+			res.send(result);
 		}
 		else {
 			console.log("Error");
@@ -183,3 +183,47 @@ app.get("/getInfo", function (req, res) {
 // 		}
 // 	}
 // })
+
+// https://ethereum.stackexchange.com/questions/25451/infura-web3-provider-for-events-get-watch
+//Infura currently doesn't support WebSockets (required for events using Web3 v1, otherwise you get the error 
+//"The current provider doesn't support subscriptions" when using infura as HttpProvider), 
+//so what you have to do is run a local geth node that connects and syncs to the network.
+// contract.events.logFileAddedStatus({fromBlock: 0},(error, result) => {
+// 	if (!error) {
+// 		console.log(result); 
+// 		if (result.returnValues.status == true) {
+// 			io.send(result.returnValues);
+// 		}
+// 	}
+// 	else {
+// 		console.log("Error");
+// 	}
+// }).on('data', (event) => {
+//     console.log(event); // same results as the optional callback above
+// })
+// .on('changed', (event) => {
+//     // remove event from local database
+// })
+// .on('error', console.error);
+
+
+contract.events.logFileAddedStatus({fromBlock: 0},(error, result) => {
+	if (!error) {
+		console.log(result); 
+		if (result.returnValues.status == true) {
+			io.send(result.returnValues);
+		}
+	}
+	else {
+		console.log("Error");
+	}
+});
+
+// contract.getPastEvents(
+// 	'logFileAddedStatus',
+// 	{
+// 	  fromBlock: 0,
+// 	  toBlock: 'latest'
+// 	},
+// 	(err, events) => { console.log(events) }
+//   )

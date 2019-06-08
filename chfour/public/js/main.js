@@ -53,7 +53,8 @@ function getInfo()
 	  			}
 	  			else
 	  			{
-	  				$("#message").html("Timestamp: " + data[0] + " Owner: " + data[1]);
+					  console.log(data);
+	  				$("#message").html("Timestamp: " + data[0]._hex + " Owner: " + data[1]);
 	  			}
 	    	});
 		};
