@@ -19,6 +19,6 @@ const INITIAL_SUPPLY = 1000;
       data: "0x" + bytecode,
       arguments: [INITIAL_SUPPLY]
     })
-    .send({ from: accounts[0], gas: 1000000 });
+    .send({ from: accounts[0], gas: 3000000 });
   console.log("Contract address:", contract.options.address);
 })();
