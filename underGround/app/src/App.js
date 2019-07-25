@@ -2,14 +2,26 @@ import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 
-import web3 from "./web3";
+// import web3 from "./web3";
+import Web3 from "web3";
 import token from "./token";
 
 class App extends Component {
   state = { balance: "", address: "", amount: "", status: "" };
 
   async componentDidMount() {
-    const accounts = await web3.eth.getAccounts();
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      try {
+        await window.ethereum.enable();
+      } catch (error) {
+        console.log(error);
+      }
+    } else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+    }
+
+    const accounts = await window.web3.eth.getAccounts();
     const balance = await token.methods.balanceOf(accounts[0]).call();
 
     this.setState({ balance });
@@ -20,7 +32,7 @@ class App extends Component {
     this.setState({ status: "Transfer in progress..." });
 
     try {
-      const accounts = await web3.eth.getAccounts();
+      const accounts = await window.web3.eth.getAccounts();
       const tx = await token.methods
         .transfer(this.state.address, this.state.amount)
         .send({ from: accounts[0] });
